@@ -1,0 +1,37 @@
+name: integration
+
+on:
+  pull_request:
+    branches: [main , dev]
+  workflow_dispatch:
+
+jobs:
+ restore-build-test:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install dotnet SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Output student name
+      run:  echo Van Overberghe Davy
+    
+    - name: Restore dependencies
+      working-directory: ./src
+      run: dotnet restore
+    
+    - name: Build solution
+      working-directory: ./src
+      run: dotnet build --no-restore
+    
+    - name: Run all tests
+      working-directory: ./src
+      run: dotnet test --no-build --verbosity normal
+    
+
+ 
